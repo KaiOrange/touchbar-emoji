@@ -1,4 +1,5 @@
 const { ipcRenderer } = require('electron');
+const EMOJIS = require("./lib/emojis.json");
 
 let canvas = document.querySelector('#canvas')
 let innerWidth = window.innerWidth;
@@ -8,6 +9,36 @@ canvas.height = innerHeight;
 let context = canvas.getContext('2d');
 context.textBaseline="top";
 context.font='38px sans-serif';
+
+// 控制器处理
+var vm = new Vue({
+  el: '#main-card',
+  data: {
+    EMOJIS,
+    selectedIndex: 1,
+    hasMouseEnter: false
+  },
+  methods:{
+    handleMouseInCard(isEnter){
+      this.hasMouseEnter = isEnter;
+      // ipcRenderer.send('set-ignore-mouse-events',!isEnter);
+    },
+    handleTabClick(index){
+      this.selectedIndex = index;
+      ipcRenderer.send('touchbar-segmented-control-selected',index - 1);
+    },
+    handleEmoji(emoji){
+      playEmojis(emoji);
+    },
+    handleQuit(){
+      ipcRenderer.send('app-quit');
+    }
+  }
+})
+
+ipcRenderer.on('tab-selected', (event, arg) => {
+  vm.selectedIndex = arg;
+})
 
 function createEmoji(text, x, y, xOffset, yOffset, scale = 1){
   return ({

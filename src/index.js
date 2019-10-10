@@ -1,5 +1,5 @@
-const { app, BrowserWindow,TouchBar } = require('electron');
-const { TouchBarSpacer, TouchBarScrubber,TouchBarButton,TouchBarSegmentedControl,TouchBarGroup
+const { app, BrowserWindow, TouchBar, ipcMain } = require('electron');
+const { TouchBarSpacer, TouchBarScrubber, TouchBarButton, TouchBarSegmentedControl, TouchBarGroup
 } = TouchBar;
 const EMOJIS = require('./lib/emojis.json');
 
@@ -29,24 +29,33 @@ let touchBarScrubber = new TouchBarScrubber({
   }
 })
 
+function touchBarSegmentedControlChange(selectedIndex,isInPage){
+  touchBarSelectIndex = selectedIndex;
+  touchBarSegmentedControl.selectedIndex = touchBarSelectIndex
+  touchBarScrubber.items = EMOJIS[touchBarSelectIndex].emojis.map(item=>{
+    return {label:item};
+  })
+  if(!isInPage && mainWindow){
+    mainWindow.webContents.send('tab-selected', selectedIndex+1)
+  }
+}
+
+const touchBarSegmentedControl = new TouchBarSegmentedControl({
+  segments:EMOJIS.map(item=>{
+    return {label:item.title};
+  }),
+  segmentStyle:'rounded',
+  mode: 'single',// single multiple buttons
+  selectedIndex : touchBarSelectIndex,
+  change: function (selectedIndex){
+    touchBarSegmentedControlChange(selectedIndex,false)
+  }
+});
+
 const touchBar = new TouchBar({
   items: [
-    new TouchBarSegmentedControl({
-      segments:EMOJIS.map(item=>{
-        return {label:item.title};
-      }),
-      segmentStyle:'rounded',
-      mode: 'single',// single multiple buttons
-      selectedIndex : touchBarSelectIndex,
-      change:(selectedIndex)=>{
-        touchBarSelectIndex = selectedIndex
-        touchBarScrubber.items = EMOJIS[touchBarSelectIndex].emojis.map(item=>{
-          return {label:item};
-        })
-      }
-    }),
+    touchBarSegmentedControl,
     new TouchBarSpacer({ size: 'small' }),
-    ,
     touchBarScrubber
   ],
   escapeItem: new TouchBarButton({
@@ -56,6 +65,18 @@ const touchBar = new TouchBar({
       app && app.quit();
     }
   })
+})
+
+ipcMain.on('touchbar-segmented-control-selected', (event, arg) => {
+  touchBarSegmentedControlChange(arg,true)
+})
+
+ipcMain.on('app-quit', (event, arg) => {
+  app && app.quit();
+})
+
+ipcMain.on('set-ignore-mouse-events', (event, arg) => {
+  mainWindow && mainWindow.setIgnoreMouseEvents(arg);
 })
 
 const createWindow = () => {
@@ -79,9 +100,10 @@ const createWindow = () => {
   // Open the DevTools.
   if (isDev) {
     mainWindow.webContents.openDevTools();
+  } else {
+    mainWindow.setVisibleOnAllWorkspaces(true);
   }
-  mainWindow.setIgnoreMouseEvents(true);
-  mainWindow.setVisibleOnAllWorkspaces(true);
+  // mainWindow.setIgnoreMouseEvents(true);
 
   mainWindow.setTouchBar(touchBar);
 

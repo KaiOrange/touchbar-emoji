@@ -3,10 +3,31 @@
   <head>
     <meta charset="UTF-8">
     <title>touchbar-emoji</title>
+    <link rel="stylesheet" href="../node_modules/papercss/dist/paper.min.css">
     <link rel="stylesheet" href="css/index.css">
   </head>
   <body>
     <canvas id="canvas" ></canvas>
+    <div :class="['card',hasMouseEnter?'mouse-in-cord':'']" id="main-card" @mouseenter="handleMouseInCard(true)" @mouseleave="handleMouseInCard(false)">
+      <div class="card-body">
+        <h4 class="card-title">touchbar-emoji</h4>
+        <div class="row flex-spaces tabs">
+          <template 
+            v-for="(item,index) in EMOJIS"
+            :key="index">
+            <input :id="'tab' + (index+1)" type="radio" name="tabs" :checked="(index + 1) === selectedIndex">
+            <label :for="'tab' + (index+1)" @click="handleTabClick(index + 1)">{{item.title}}</label>
+          </template>
+        
+          <div v-for="(item,index) in EMOJIS" class="content" :id="'content' + (index+1)">
+            <div class="row flex-start child-borders emojis-block">
+              <button v-for="(emoji,i) in item.emojis" :key="i" @click="handleEmoji(emoji)" class="btn-small">{{emoji}}</button>
+            </div>
+        </div>
+        <button class="btn-block btn-danger" @click="handleQuit">退出</button>
+      </div>
+    </div>
+    <script src="../node_modules/vue/dist/vue.min.js"></script>
     <script src="js/index.js"></script>
   </body>
 </html>
