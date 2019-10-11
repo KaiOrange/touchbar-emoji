@@ -1,0 +1,33 @@
+*{
+  margin: 0;
+  padding: 0;
+}
+
+#main-card {
+  background: #ffffff;
+  transition: all 235ms ease 0s;
+}
+
+#main-card:hover {
+  -webkit-transform: translate3d(0,0,0);
+  transform: translate3d(0,0,0);
+}
+
+.emojis-block {
+  margin-left: -5px;
+}
+
+#main-card .row.tabs{
+  margin-bottom: 0;
+}
+
+.emojis-block > button{
+  font-size: 1rem;
+  padding: 0.2rem;
+  margin-left: 5px;
+  margin-bottom: 5px;
+  padding-top: 6px;
+  padding-bottom: 0;
+  width: 32px;
+  height: 32px;
+}

@@ -11,8 +11,13 @@ if (require('electron-squirrel-startup')) { // eslint-disable-line global-requir
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
 let mainWindow;
+let controlWindow;
 const isDev = process.env.NODE_ENV === "development";
 let touchBarSelectIndex = 0;
+let controlWidth = 383;
+let minLeft = -controlWidth + 6;
+let maxLeft = 0;
+
 let touchBarScrubber = new TouchBarScrubber({
   items: EMOJIS[touchBarSelectIndex].emojis.map(item=>{
     return {label:item};
@@ -35,8 +40,8 @@ function touchBarSegmentedControlChange(selectedIndex,isInPage){
   touchBarScrubber.items = EMOJIS[touchBarSelectIndex].emojis.map(item=>{
     return {label:item};
   })
-  if(!isInPage && mainWindow){
-    mainWindow.webContents.send('tab-selected', selectedIndex+1)
+  if(!isInPage && controlWindow){
+    controlWindow.webContents.send('tab-selected', selectedIndex+1)
   }
 }
 
@@ -79,6 +84,14 @@ ipcMain.on('set-ignore-mouse-events', (event, arg) => {
   mainWindow && mainWindow.setIgnoreMouseEvents(arg);
 })
 
+ipcMain.on('play-emoji', (event, arg) => {
+  mainWindow.webContents.send('play-emoji', arg);
+})
+
+ipcMain.on('control-slide', (event, isLeft) => {
+  controlWindow.setBounds({ x: isLeft ? minLeft : maxLeft },true)
+})
+
 const createWindow = () => {
   // Create the browser window.
   mainWindow = new BrowserWindow({
@@ -101,19 +114,51 @@ const createWindow = () => {
   if (isDev) {
     mainWindow.webContents.openDevTools();
   } else {
-    mainWindow.setVisibleOnAllWorkspaces(true);
+    mainWindow.setIgnoreMouseEvents(true);
   }
-  // mainWindow.setIgnoreMouseEvents(true);
+  mainWindow.setVisibleOnAllWorkspaces(true);
 
-  mainWindow.setTouchBar(touchBar);
+  controlWindow = new BrowserWindow({
+    width: controlWidth,
+    x: maxLeft,
+    y: 180,
+    frame: false,
+    useContentSize: true,
+    transparent: true, 
+    resizable: false,
+    alwaysOnTop: true,
+    parent: mainWindow,
+    maximizable: false,
+    webPreferences: {
+      nodeIntegration: true
+    }
+  });
+
+  controlWindow.loadURL(`file://${__dirname}/control.html`);
+  controlWindow.setTouchBar(touchBar);
+  controlWindow.setVisibleOnAllWorkspaces(true);
+  if (isDev) {
+    controlWindow.webContents.openDevTools();
+  }
 
   // Emitted when the window is closed.
-  mainWindow.on('closed', () => {
+  controlWindow.on('closed', () => {
     // Dereference the window object, usually you would store windows
     // in an array if your app supports multi windows, this is the time
     // when you should delete the corresponding element.
     mainWindow = null;
+    controlWindow = null;
   });
+
+  mainWindow.on('closed', () => {
+    mainWindow = null;
+    controlWindow = null;
+  });
+
+  // 移动到最右边
+  setTimeout(()=>{
+    controlWindow.setBounds({ x: minLeft },true)
+  },800)
 };
 
 // This method will be called when Electron has finished
