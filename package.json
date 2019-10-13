@@ -20,7 +20,10 @@
   "license": "MIT",
   "config": {
     "forge": {
-      "packagerConfig": {},
+      "packagerConfig": {
+        "name": "touchbar-emoji",
+        "icon": "src/lib/favicon"
+      },
       "makers": [
         {
           "name": "@electron-forge/maker-squirrel",

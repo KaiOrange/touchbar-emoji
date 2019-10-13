@@ -2,6 +2,7 @@ const { app, BrowserWindow, TouchBar, ipcMain } = require('electron');
 const { TouchBarSpacer, TouchBarScrubber, TouchBarButton, TouchBarSegmentedControl, TouchBarGroup
 } = TouchBar;
 const EMOJIS = require('./lib/emojis.json');
+const path = require('path');
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
 if (require('electron-squirrel-startup')) { // eslint-disable-line global-require
@@ -102,6 +103,7 @@ const createWindow = () => {
     frame: false,
     resizable:false,
     alwaysOnTop:true,
+    icon: path.join(__dirname,'lib','emoji-logo.png'),
     webPreferences: {
       nodeIntegration: true
     }
@@ -129,6 +131,7 @@ const createWindow = () => {
     alwaysOnTop: true,
     parent: mainWindow,
     maximizable: false,
+    icon: path.join(__dirname,'lib','emoji-logo.png'),
     webPreferences: {
       nodeIntegration: true
     }
@@ -137,9 +140,9 @@ const createWindow = () => {
   controlWindow.loadURL(`file://${__dirname}/control.html`);
   controlWindow.setTouchBar(touchBar);
   controlWindow.setVisibleOnAllWorkspaces(true);
-  if (isDev) {
-    controlWindow.webContents.openDevTools();
-  }
+  // if (isDev) {
+  //   controlWindow.webContents.openDevTools();
+  // }
 
   // Emitted when the window is closed.
   controlWindow.on('closed', () => {
@@ -182,6 +185,8 @@ app.on('activate', () => {
     createWindow();
   }
 });
+
+app.dock.setIcon(path.join(__dirname,'lib','emoji-logo.png'))
 
 // In this file you can include the rest of your app's specific main process
 // code. You can also put them in separate files and import them here.
