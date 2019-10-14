@@ -90,7 +90,7 @@ ipcMain.on('play-emoji', (event, arg) => {
 })
 
 ipcMain.on('control-slide', (event, isLeft) => {
-  controlWindow.setBounds({ x: isLeft ? minLeft : maxLeft },true)
+controlWindow.setBounds({ x: isLeft ? minLeft : maxLeft },true)
 })
 
 const createWindow = () => {
@@ -157,7 +157,7 @@ const createWindow = () => {
     mainWindow = null;
     controlWindow = null;
   });
-
+  
   // 移动到最右边
   setTimeout(()=>{
     controlWindow.setBounds({ x: minLeft },true)
@@ -186,7 +186,9 @@ app.on('activate', () => {
   }
 });
 
-app.dock.setIcon(path.join(__dirname,'lib','emoji-logo.png'))
+if (app.dock) {
+    app.dock.setIcon(path.join(__dirname,'lib','emoji-logo.png'))
+}
 
 // In this file you can include the rest of your app's specific main process
 // code. You can also put them in separate files and import them here.
