@@ -16,7 +16,7 @@ let isPersistent = false;
 let isRandom = false;
 let floatMaxTime = 500;// 间隔500毫秒发一发
 let currentTime = 0;// 间隔500毫秒发一发
-let currentEmoji = '😀';
+let currentEmoji =  localStorage.getItem("init-emoji") || '😀';
 
 function createEmoji(text, x, y, xOffset, yOffset, scale = 1){
   return ({
@@ -72,6 +72,7 @@ let emojiArray = [];
 
 function playEmojis(text){
   currentEmoji = text;
+  localStorage.setItem("init-emoji", currentEmoji);
   let randomTotle = 5 + random(6);
   for (let i = 0; i < randomTotle; i++) {
     emojiArray.push(createRandomEmoji(text));
