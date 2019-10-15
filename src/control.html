@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="css/control.css">
   </head>
   <body>
-    <div class="card" id="main-card" @mouseenter="handleMouseInCard(true)" @mouseleave="handleMouseInCard(false)">
+    <div :class="['card',isDarwin?'isDarwin':'']" id="main-card" @mouseenter="handleMouseInCard(true)" @mouseleave="handleMouseInCard(false)">
       <div class="card-body">
         <h4 class="card-title">touchbar-emoji</h4>
         <div class="row flex-spaces tabs">

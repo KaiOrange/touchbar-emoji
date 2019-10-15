@@ -7,6 +7,7 @@ var vm = new Vue({
   data: {
     EMOJIS,
     selectedIndex: 1,
+    isDarwin: process.platform === 'darwin'
   },
   methods:{
     handleMouseInCard(isEnter){
