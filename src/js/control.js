@@ -1,13 +1,20 @@
 const { ipcRenderer } = require('electron');
 const EMOJIS = require("./lib/emojis.json");
 
+let initPersistent = localStorage.getItem("init-persistent") !== "false"; // 为空或者是"true"时选中
+let initRandom = localStorage.getItem("init-random") === "true";
+ipcRenderer.send('persistent-float',initPersistent);
+ipcRenderer.send('random-float',initRandom);
+
 // 控制器处理
 var vm = new Vue({
   el: '#main-card',
   data: {
     EMOJIS,
     selectedIndex: 1,
-    isDarwin: process.platform === 'darwin'
+    isDarwin: process.platform === 'darwin',
+    isPersistent: initPersistent,
+    isRandom: initRandom
   },
   methods:{
     handleMouseInCard(isEnter){
@@ -22,7 +29,20 @@ var vm = new Vue({
     },
     handleQuit(){
       ipcRenderer.send('app-quit');
-    }
+    },
+    handlePersistent(e){
+      this.isPersistent = e.target.checked;
+      localStorage.setItem("init-persistent", this.isPersistent);
+      ipcRenderer.send('persistent-float',this.isPersistent);
+    },
+    handleRandom(e){
+      if(!this.isPersistent){
+        return;
+      }
+      this.isRandom = e.target.checked;
+      localStorage.setItem("init-random", this.isRandom);
+      ipcRenderer.send('random-float',this.isRandom);
+    },
   }
 })
 

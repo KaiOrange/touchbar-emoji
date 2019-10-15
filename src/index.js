@@ -89,6 +89,14 @@ ipcMain.on('play-emoji', (event, arg) => {
   mainWindow.webContents.send('play-emoji', arg);
 })
 
+ipcMain.on('persistent-float', (event, arg) => {
+  mainWindow.webContents.send('persistent-float', arg);
+})
+
+ipcMain.on('random-float', (event, arg) => {
+  mainWindow.webContents.send('random-float', arg);
+})
+
 if (!isDev) {
   ipcMain.on('control-slide', (event, isLeft) => {
     controlWindow.setBounds({ x: isLeft ? minLeft : maxLeft },true)

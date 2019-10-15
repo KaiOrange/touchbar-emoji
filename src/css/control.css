@@ -15,10 +15,11 @@
 
 .emojis-block {
   margin-left: -5px;
+  margin-bottom: 0;
 }
 
-#main-card .row.tabs{
-  margin-bottom: 0;
+.no-margin {
+  margin: 0 !important;
 }
 
 .emojis-block > button{
@@ -36,4 +37,8 @@
 .isDarwin .emojis-block > button {
   padding-left: 3px;
   padding-top: 6px;
+}
+
+.form-group .paper-check input + span::before, .form-group .paper-radio input + span::before {
+    vertical-align: -0.16em;
 }

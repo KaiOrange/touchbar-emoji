@@ -1,4 +1,8 @@
 const { ipcRenderer } = require('electron');
+const EMOJIS = require("./lib/emojis.json");
+const ALLEMOJIS = EMOJIS.reduce((pre,next)=>{
+	return pre.concat(next.emojis || []);
+},[])
 
 let canvas = document.querySelector('#canvas')
 let innerWidth = window.innerWidth;
@@ -8,6 +12,11 @@ canvas.height = innerHeight;
 let context = canvas.getContext('2d');
 context.textBaseline="top";
 context.font='38px sans-serif';
+let isPersistent = false;
+let isRandom = false;
+let floatMaxTime = 500;// 间隔500毫秒发一发
+let currentTime = 0;// 间隔500毫秒发一发
+let currentEmoji = '😀';
 
 function createEmoji(text, x, y, xOffset, yOffset, scale = 1){
   return ({
@@ -61,7 +70,8 @@ function createRandomEmoji(text){
 
 let emojiArray = [];
 
-function playEmojis(text = '😀'){
+function playEmojis(text){
+  currentEmoji = text;
   let randomTotle = 5 + random(6);
   for (let i = 0; i < randomTotle; i++) {
     emojiArray.push(createRandomEmoji(text));
@@ -69,13 +79,21 @@ function playEmojis(text = '😀'){
 }
 
 //启动时候发一波
-playEmojis();
+playEmojis(currentEmoji);
 
 ipcRenderer.on('play-emoji', (event, message) => {
   playEmojis(message);
 })
 
-function animate(){
+ipcRenderer.on('persistent-float', (event, message) => {
+  isPersistent = message;
+})
+
+ipcRenderer.on('random-float', (event, message) => {
+  isRandom = message;
+})
+
+function animate(time = 0){
   context.clearRect(0, 0, canvas.width, canvas.height);
   for (let i = emojiArray.length - 1; i >= 0; i--) {
     const element = emojiArray[i];
@@ -87,6 +105,14 @@ function animate(){
   for (let i = 0; i < emojiArray.length; i++) {
     const element = emojiArray[i];
     element.draw();
+  }
+  if (isPersistent && time - currentTime > floatMaxTime) {
+    currentTime = time;
+    let text = currentEmoji;
+    if (isRandom) {
+      text = ALLEMOJIS[random(ALLEMOJIS.length)];
+    }
+    emojiArray.push(createRandomEmoji(text));
   }
   requestAnimationFrame(animate);
 }
