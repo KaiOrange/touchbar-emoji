@@ -83,7 +83,9 @@ function playEmojis(text){
 playEmojis(currentEmoji);
 
 ipcRenderer.on('play-emoji', (event, message) => {
-  playEmojis(message);
+  currentEmoji = message;
+  localStorage.setItem("init-emoji", currentEmoji);
+  playEmojis(currentEmoji);
 })
 
 ipcRenderer.on('persistent-float', (event, message) => {
