@@ -141,6 +141,7 @@ const createWindow = () => {
     parent: mainWindow,
     maximizable: false,
     icon: path.join(__dirname,'lib','emoji-logo.png'),
+    hasShadow: false,
     webPreferences: {
       nodeIntegration: true
     }

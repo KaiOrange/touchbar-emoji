@@ -3,6 +3,17 @@
   padding: 0;
 }
 
+html, body {
+  overflow: visible;
+}
+
+html::-webkit-scrollbar, body::-webkit-scrollbar {
+  width: 2px;
+}
+html::-webkit-scrollbar-thumb, body::-webkit-scrollbar-thumb {
+  background: red;
+}
+
 #main-card {
   background: #ffffff;
   transition: all 235ms ease 0s;
