@@ -132,7 +132,7 @@ const createWindow = () => {
   controlWindow = new BrowserWindow({
     width: controlWidth,
     x: maxLeft,
-    y: 180,
+    y: 120,
     frame: false,
     useContentSize: true,
     transparent: true, 
