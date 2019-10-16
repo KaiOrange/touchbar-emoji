@@ -99,7 +99,7 @@ ipcMain.on('random-float', (event, arg) => {
 
 if (!isDev) {
   ipcMain.on('control-slide', (event, isLeft) => {
-    controlWindow.setBounds({ x: isLeft ? minLeft : maxLeft },true)
+    controlWindow.setBounds({ x: isLeft ? minLeft : maxLeft,width: controlWidth, },true)
   })
 }
 
@@ -134,6 +134,8 @@ const createWindow = () => {
     x: maxLeft,
     y: 120,
     frame: false,
+    minWidth: controlWidth,
+    maxWidth: controlWidth,
     useContentSize: true,
     transparent: true, 
     resizable: false,
@@ -147,6 +149,7 @@ const createWindow = () => {
     }
   });
 
+  controlWindow.focus();
   controlWindow.loadURL(`file://${__dirname}/control.html`);
   controlWindow.setTouchBar(touchBar);
   controlWindow.setVisibleOnAllWorkspaces(true);
@@ -155,7 +158,7 @@ const createWindow = () => {
   } else {
     // 移动到最右边
     setTimeout(()=>{
-      controlWindow.setBounds({ x: minLeft },true)
+      controlWindow.setBounds({ x: minLeft,width: controlWidth, },true)
     },800)
   }
 

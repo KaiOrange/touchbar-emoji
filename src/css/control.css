@@ -17,6 +17,7 @@ html::-webkit-scrollbar-thumb, body::-webkit-scrollbar-thumb {
 #main-card {
   background: #ffffff;
   transition: all 235ms ease 0s;
+  box-shadow: none !important;
 }
 
 #main-card:hover {
