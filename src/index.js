@@ -1,4 +1,5 @@
-const { app, BrowserWindow, TouchBar, ipcMain } = require('electron');
+const electron = require('electron');
+const { app, BrowserWindow, TouchBar, ipcMain } = electron;
 const { TouchBarSpacer, TouchBarScrubber, TouchBarButton, TouchBarSegmentedControl, TouchBarGroup
 } = TouchBar;
 const EMOJIS = require('./lib/emojis.json');
@@ -148,7 +149,9 @@ const createWindow = () => {
       nodeIntegration: true
     }
   });
-
+  const { height } = electron.screen.getPrimaryDisplay().workAreaSize;
+  let controlWindowY = (height - controlWindow.getSize()[1]) / 2
+  controlWindow.setBounds({ y: controlWindowY,width: controlWidth },false)
   controlWindow.focus();
   controlWindow.loadURL(`file://${__dirname}/control.html`);
   controlWindow.setTouchBar(touchBar);
@@ -158,7 +161,7 @@ const createWindow = () => {
   } else {
     // 移动到最右边
     setTimeout(()=>{
-      controlWindow.setBounds({ x: minLeft,width: controlWidth, },true)
+      controlWindow.setBounds({ x: minLeft,width: controlWidth },true)
     },800)
   }
 

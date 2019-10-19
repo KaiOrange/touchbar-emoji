@@ -5,6 +5,12 @@ let initPersistent = localStorage.getItem("init-persistent") !== "false"; // 为
 let initRandom = localStorage.getItem("init-random") === "true";
 ipcRenderer.send('persistent-float',initPersistent);
 ipcRenderer.send('random-float',initRandom);
+if (process.platform === 'win32') {
+  let link = document.createElement("link");
+  link.setAttribute("rel","stylesheet");
+  link.setAttribute("href","css/font.css");
+  document.body.appendChild(link);
+}
 
 // 控制器处理
 var vm = new Vue({

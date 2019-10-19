@@ -16,7 +16,14 @@ let isPersistent = false;
 let isRandom = false;
 let floatMaxTime = 500;// 间隔500毫秒发一发
 let currentTime = 0;// 间隔500毫秒发一发
-let currentEmoji =  localStorage.getItem("init-emoji") || '😀';
+let currentEmoji =  localStorage.getItem("init-emoji") || ALLEMOJIS[0];
+if (process.platform === 'win32') {
+  let link = document.createElement("link");
+  link.setAttribute("rel","stylesheet");
+  link.setAttribute("href","css/font.css");
+  document.body.appendChild(link);
+  context.font='38px Emoji';
+}
 
 function createEmoji(text, x, y, xOffset, yOffset, scale = 1){
   return ({

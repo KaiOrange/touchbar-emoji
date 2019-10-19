@@ -1,0 +1,9 @@
+@font-face {
+    font-family: 'Emoji';
+    src: url('../lib/font/seguiemj.eot');
+    src: url('../lib/font/seguiemj.eot?#iefix') format('embedded-opentype'),
+         url('../lib/font/seguiemj.ttf') format('truetype');
+}
+body, .emojis-block > button {
+    font-family: 'Segoe UI Emoji', 'Emoji', Tahoma, Geneva, 'Simsun';
+}
