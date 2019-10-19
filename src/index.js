@@ -151,7 +151,7 @@ const createWindow = () => {
   });
   const { height } = electron.screen.getPrimaryDisplay().workAreaSize;
   let controlWindowY = (height - controlWindow.getSize()[1]) / 2
-  controlWindow.setBounds({ y: controlWindowY,width: controlWidth },false)
+  controlWindow.setBounds({ y: Math.floor(controlWindowY),width: controlWidth },false)
   controlWindow.focus();
   controlWindow.loadURL(`file://${__dirname}/control.html`);
   controlWindow.setTouchBar(touchBar);
