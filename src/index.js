@@ -1,5 +1,5 @@
 const electron = require('electron');
-const { app, BrowserWindow, TouchBar, ipcMain } = electron;
+const { app, BrowserWindow, TouchBar, ipcMain, Menu } = electron;
 const { TouchBarSpacer, TouchBarScrubber, TouchBarButton, TouchBarSegmentedControl, TouchBarGroup
 } = TouchBar;
 const EMOJIS = require('./lib/emojis.json');
@@ -106,10 +106,15 @@ if (!isDev) {
 
 const createWindow = () => {
   // Create the browser window.
+  const {  width, height  } = electron.screen.getPrimaryDisplay().workAreaSize;
   mainWindow = new BrowserWindow({
-    fullscreen: true,
-    fullscreenable:true,
-    simpleFullscreen:true, 
+    // fullscreen: true,
+    // fullscreenable:true,
+    // simpleFullscreen:true, 
+    width,
+    height,
+    x:0,
+    y:0,
     transparent: true, 
     frame: false,
     resizable:false,
@@ -149,7 +154,7 @@ const createWindow = () => {
       nodeIntegration: true
     }
   });
-  const { height } = electron.screen.getPrimaryDisplay().workAreaSize;
+  
   let controlWindowY = (height - controlWindow.getSize()[1]) / 2
   controlWindow.setBounds({ y: Math.floor(controlWindowY),width: controlWidth },false)
   controlWindow.focus();
@@ -177,6 +182,11 @@ const createWindow = () => {
   mainWindow.on('closed', () => {
     mainWindow = null;
     controlWindow = null;
+  });
+
+  electron.screen.on('display-metrics-changed',function (){
+    const {  width, height  } = electron.screen.getPrimaryDisplay().workAreaSize;
+    mainWindow.setBounds({ x:0,y:0,width,height },false)
   });
 };
 
@@ -208,3 +218,20 @@ if (app.dock) {
 
 // In this file you can include the rest of your app's specific main process
 // code. You can also put them in separate files and import them here.
+const template = [
+  ...(process.platform === 'darwin' ? [{
+    label: app.getName(),
+    submenu:[
+      {
+        label: 'Github',
+        click: async () => {
+          const { shell } = require('electron')
+          await shell.openExternal('https://github.com/KaiOrange/touchbar-emoji')
+        }
+      }
+    ]
+  }] : []),
+]
+
+const menu = Menu.buildFromTemplate(template)
+Menu.setApplicationMenu(menu)

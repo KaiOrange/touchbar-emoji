@@ -36,8 +36,8 @@ var vm = new Vue({
     handleQuit(){
       ipcRenderer.send('app-quit');
     },
-    handlePersistent(e){
-      this.isPersistent = e.target.checked;
+    handlePersistent(){
+      this.isPersistent = !this.isPersistent;
       localStorage.setItem("init-persistent", this.isPersistent);
       ipcRenderer.send('persistent-float',this.isPersistent);
     },
@@ -45,7 +45,7 @@ var vm = new Vue({
       if(!this.isPersistent){
         return;
       }
-      this.isRandom = e.target.checked;
+      this.isRandom = !this.isRandom;
       localStorage.setItem("init-random", this.isRandom);
       ipcRenderer.send('random-float',this.isRandom);
     },

@@ -30,15 +30,15 @@
         <div class="row no-margin">
           <div class="col sm-6 col-6">
             <fieldset class="form-group no-margin">
-              <label class="paper-check no-margin" >
-                <input type="checkbox" name="isPersistent" :checked="isPersistent" @click="handlePersistent"> <span>持续飘落</span>
+              <label class="paper-check no-margin" @click.prevent="handlePersistent">
+                <input type="checkbox" name="isPersistent" :checked="isPersistent" /> <span>持续飘落</span>
               </label>
             </fieldset>
           </div>
           <div class="col sm-6 col-6">
             <fieldset :class="['form-group', 'no-margin',!isPersistent?'disabled':'']">
-              <label class="paper-check no-margin" >
-                <input type="checkbox" name="isRandom" :checked="isRandom" @click="handleRandom" > <span>随机表情</span>
+              <label class="paper-check no-margin" @click.prevent="handleRandom" >
+                <input type="checkbox" name="isRandom" :checked="isRandom"  /> <span>随机表情</span>
               </label>
             </fieldset>
           </div>

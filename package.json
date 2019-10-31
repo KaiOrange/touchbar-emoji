@@ -1,6 +1,6 @@
 {
   "name": "touchbar-emoji",
-  "productName": "touchbar-emoji",
+  "productName": "TouchbarEmoji",
   "version": "1.0.0",
   "description": "使用touchbar来控制飘落emoji表情雨。",
   "main": "src/index.js",
