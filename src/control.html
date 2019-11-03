@@ -12,33 +12,71 @@
   <body>
     <div :class="['card',isDarwin?'isDarwin':'']" id="main-card" @mouseenter="handleMouseInCard(true)" @mouseleave="handleMouseInCard(false)">
       <div class="card-body">
-        <h4 class="card-title">touchbar-emoji</h4>
-        <div class="row flex-spaces tabs no-margin">
-          <template 
-            v-for="(item,index) in EMOJIS"
-            :key="index">
-            <input :id="'tab' + (index+1)" type="radio" name="tabs" :checked="(index + 1) === selectedIndex">
-            <label :for="'tab' + (index+1)" @click="handleTabClick(index + 1)">{{item.title}}</label>
-          </template>
-        
-          <div v-for="(item,index) in EMOJIS" class="content" :id="'content' + (index+1)">
-            <div class="row flex-start child-borders emojis-block">
-              <button v-for="(emoji,i) in item.emojis" :key="i" @click="handleEmoji(emoji)" class="btn-small">{{emoji}}</button>
+        <h4 class="card-title">touchbar-emoji<span @click="handleTogglePaging" class="btn-paging">🔃</span></h4>
+        <div :class="['row', 'no-margin', 'emoji-content',isPaging?'paging':'']">
+          <div class="row flex-spaces tabs emoji-tabs">
+            <template 
+              v-for="(item,index) in EMOJIS"
+              :key="index">
+              <input :id="'tab' + (index+1)" type="radio" name="tabs" :checked="(index + 1) === selectedIndex">
+              <label :for="'tab' + (index+1)" @click="handleTabClick(index + 1)">{{item.title}}</label>
+            </template>
+          
+            <div v-for="(item,index) in EMOJIS" class="content" :id="'content' + (index+1)">
+              <div class="row flex-start child-borders emojis-block">
+                <button v-for="(emoji,i) in item.emojis" :key="i" @click="handleEmoji(emoji)" class="btn-small">{{emoji}}</button>
+              </div>
+            </div>
+          </div>
+          <div class="no-margin emoji-custom">
+            <div class="emoji-form">
+              <div class="form-group">
+                <input 
+                  @keyup.enter="handleAddCustomText"
+                  @animationend="handleClearAnimation"
+                  type="text" 
+                  maxLength="10" 
+                  v-model.trim="customText" 
+                  placeholder="最多10个字" 
+                  :class="[isInputShake?'shake':'']"/>
+                <button @click="handleAddCustomText" class="btn-secondary">添加</button>
+              </div>
+            </div>
+            <div class="emoji-list">
+              <ul>
+                <li  
+                  v-for="(text,index) in customTexts"
+                  :key="index"
+                  >
+                    <span class="text" @click="handleEmoji(text)">{{text}}</span>
+                    <span class="delete" @click="handleDeleteCustomText(text)">❌</span>
+                </li>
+              </ul>
             </div>
           </div>
         </div>
         <div class="row no-margin">
-          <div class="col sm-6 col-6">
+          <div class="col col-4 no-padding-horizontal">
             <fieldset class="form-group no-margin">
               <label class="paper-check no-margin" @click.prevent="handlePersistent">
-                <input type="checkbox" name="isPersistent" :checked="isPersistent" /> <span>持续飘落</span>
+                <input type="checkbox" name="isPersistent" :checked="isPersistent" /> <span>持续</span>
               </label>
             </fieldset>
           </div>
-          <div class="col sm-6 col-6">
+          <div class="col col-4 no-padding-horizontal">
             <fieldset :class="['form-group', 'no-margin',!isPersistent?'disabled':'']">
-              <label class="paper-check no-margin" @click.prevent="handleRandom" >
-                <input type="checkbox" name="isRandom" :checked="isRandom"  /> <span>随机表情</span>
+              <label 
+                class="paper-check no-margin" 
+                @click.prevent="handleRandom" 
+                :title="!isPersistent?'选中持续可以修改':''">
+                <input type="checkbox" name="isRandom" :checked="isRandom"  /> <span>随机</span>
+              </label>
+            </fieldset>
+          </div>
+          <div class="col col-4 no-padding-horizontal">
+            <fieldset :class="['form-group', 'no-margin',!isPersistent || customTexts.length === 0 || !isRandom ?'disabled':'']">
+              <label class="paper-check no-margin" @click.prevent="handleCustom" :title="!isPersistent?'选中持续可以修改': (!isRandom?'选中随机可以修改':(customTexts.length === 0 ? '请先添加自定义表情或文字':''))">
+                <input type="checkbox" name="isCustom" :checked="isCustom"  /> <span>自定义</span>
               </label>
             </fieldset>
           </div>

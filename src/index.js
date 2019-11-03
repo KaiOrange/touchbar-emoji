@@ -98,6 +98,14 @@ ipcMain.on('random-float', (event, arg) => {
   mainWindow.webContents.send('random-float', arg);
 })
 
+ipcMain.on('only-custom', (event, arg) => {
+  mainWindow.webContents.send('only-custom', arg);
+})
+
+ipcMain.on('set-custom-texts', (event, arg) => {
+  mainWindow.webContents.send('set-custom-texts', arg);
+})
+
 if (!isDev) {
   ipcMain.on('control-slide', (event, isLeft) => {
     controlWindow.setBounds({ x: isLeft ? minLeft : maxLeft,width: controlWidth, },true)
@@ -167,7 +175,7 @@ const createWindow = () => {
     // 移动到最右边
     setTimeout(()=>{
       controlWindow.setBounds({ x: minLeft,width: controlWidth },true)
-    },800)
+    },1000)
   }
 
   // Emitted when the window is closed.

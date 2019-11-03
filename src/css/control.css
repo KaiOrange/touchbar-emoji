@@ -7,22 +7,64 @@ html, body {
   overflow: visible;
 }
 
-html::-webkit-scrollbar, body::-webkit-scrollbar {
-  width: 2px;
+::-webkit-scrollbar {
+  width: 8px;
+  height: 1px;
 }
-html::-webkit-scrollbar-thumb, body::-webkit-scrollbar-thumb {
-  background: red;
+
+::-webkit-scrollbar-thumb {
+  border-radius: 8px;
+  box-shadow: inset 0 0 5px rgba(0,0,0,.3);
+  background: #4ea0ee;
+}
+
+::-webkit-scrollbar-track {
+  box-shadow: inset 0 0 1px rgba(0,0,0,0);
+  border-radius: 8px;
+  background: #deefff;
 }
 
 #main-card {
   background: #ffffff;
   transition: all 235ms ease 0s;
   box-shadow: none !important;
+
+  position: relative;
 }
 
 #main-card:hover {
   -webkit-transform: translate3d(0,0,0);
   transform: translate3d(0,0,0);
+}
+
+.emoji-content {
+  position: relative;
+  -webkit-perspective: 1000;
+  perspective: 1000;
+  transform-style: preserve-3d;
+  height: 366px;
+  transition: all .3s ease-in-out;
+}
+
+.emoji-content.paging {
+  transform: rotateY(180deg);
+}
+
+.emoji-tabs {
+  margin: 0;
+  height: 100%;;
+  backface-visibility: hidden;
+}
+
+.emoji-custom {
+  height: 100%;
+  transform: rotateY(-180deg);
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  backface-visibility: hidden;
 }
 
 .emojis-block {
@@ -34,7 +76,12 @@ html::-webkit-scrollbar-thumb, body::-webkit-scrollbar-thumb {
   margin: 0 !important;
 }
 
-.emojis-block > button{
+.no-padding-horizontal {
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+}
+
+.emojis-block button.btn-small{
   font-size: 1rem;
   padding: 0rem;
   margin-left: 5px;
@@ -46,11 +93,92 @@ html::-webkit-scrollbar-thumb, body::-webkit-scrollbar-thumb {
   align-items: center;
 }
 
-.isDarwin .emojis-block > button {
+.isDarwin .emojis-block > button.btn-small {
   padding-left: 3px;
   padding-top: 6px;
 }
 
 .form-group .paper-check input + span::before, .form-group .paper-radio input + span::before {
     vertical-align: -0.16em;
+}
+
+.btn-paging {
+  font-size: 1rem;
+  margin-left: .5rem;
+  cursor: pointer;
+}
+
+.emoji-form {
+  margin-top: 20px;
+  padding: 0;
+  width: 100%;
+}
+
+.emoji-form > .form-group {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.emoji-form > .form-group > input {
+  width: 70%;
+}
+
+.emoji-form > .form-group > button {
+  width: 25%;
+  height: 47px;
+  line-height: 47px;
+  padding: 0;
+  margin: 0;
+}
+
+.emoji-form > .form-group > button:hover {
+  transform: translate3d(0,0,0);
+}
+
+.emoji-list {
+  padding-left: 1rem;
+  overflow-y: auto;;
+  max-height: 278px;
+}
+
+.emoji-list .text {
+  cursor: pointer;
+  user-select: none;
+}
+
+.emoji-list .delete {
+  margin-left: 20px;
+  float: right;
+  cursor: pointer;
+}
+
+.shake {
+  animation: shake .8s ease;
+}
+
+@keyframes shake {
+  from,
+  to {
+    -webkit-transform: translate3d(0, 0, 0);
+    transform: translate3d(0, 0, 0);
+  }
+
+  10%,
+  30%,
+  50%,
+  70%,
+  90% {
+    -webkit-transform: translate3d(-10px, 0, 0);
+    transform: translate3d(-10px, 0, 0);
+  }
+
+  20%,
+  40%,
+  60%,
+  80% {
+    -webkit-transform: translate3d(10px, 0, 0);
+    transform: translate3d(10px, 0, 0);
+  }
 }
