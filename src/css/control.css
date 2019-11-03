@@ -140,7 +140,7 @@ html, body {
 .emoji-list {
   padding-left: 1rem;
   overflow-y: auto;;
-  max-height: 278px;
+  height: 278px;
 }
 
 .emoji-list .text {
