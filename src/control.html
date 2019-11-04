@@ -24,7 +24,13 @@
           
             <div v-for="(item,index) in EMOJIS" class="content" :id="'content' + (index+1)">
               <div class="row flex-start child-borders emojis-block">
-                <button v-for="(emoji,i) in item.emojis" :key="i" @click="handleEmoji(emoji)" class="btn-small">{{emoji}}</button>
+                <button 
+                  v-for="(emoji,i) in item.emojis" 
+                  :key="i"
+                  @click="handleEmoji(emoji)"
+                  @mousedown="handleEmojiMousedown"
+                  @mouseup="handleEmojiMouseup"
+                  class="btn-small">{{emoji}}</button>
               </div>
             </div>
           </div>
@@ -82,6 +88,13 @@
           </div>
         </div>
         <button class="btn-block btn-danger no-margin" @click="handleQuit">退出</button>
+        <div  
+          v-for="(item,index) in flotages"
+          :key="item.left + '-' + item.top"  
+          class="flotage"
+          :style="{ left:item.left + 'px',top: item.top + 'px' }"
+          @animationend="handleFlotagesAnimationend(index)"
+          >自定义 +{{item.text}}</div>
       </div>
     </div>
     <script src="../node_modules/vue/dist/vue.min.js"></script>

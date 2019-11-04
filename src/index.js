@@ -239,6 +239,17 @@ const template = [
       }
     ]
   }] : []),
+  {
+    label: '编辑',
+    submenu: [
+      { label: '撤销', role: 'undo' },
+      { label: '恢复', role: 'redo' },
+      { type: 'separator' },
+      { label: '剪切', role: 'cut' },
+      { label: '复制', role: 'copy' },
+      { label: '粘贴', role: 'paste' }
+    ]
+  },
 ]
 
 const menu = Menu.buildFromTemplate(template)

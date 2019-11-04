@@ -29,7 +29,9 @@ var vm = new Vue({
     isPaging: false,
     customText: '',
     customTexts: initCustomTexts,
-    isInputShake: false
+    isInputShake: false,
+    longpressTimer: null,
+    flotages: []
   },
   methods:{
     handleMouseInCard(isEnter){
@@ -72,17 +74,20 @@ var vm = new Vue({
         this.isInputShake = true;
         return;
       }
-      let index = this.customTexts.findIndex(item=>item===this.customText)
+      ipcRenderer.send('play-emoji',this.customText);
+      this.addCustomText(this.customText)
+      this.customText = '';
+    },
+    addCustomText(customText){
+      let index = this.customTexts.findIndex(item=>item===customText)
       if(index !== -1) {
         this.customTexts.splice(index,1)
       }
-      this.customTexts.unshift(this.customText);
+      this.customTexts.unshift(customText);
       localStorage.setItem("custom-texts", JSON.stringify(this.customTexts));
-      ipcRenderer.send('play-emoji',this.customText);
       ipcRenderer.send('set-custom-texts',{
         texts: this.customTexts,
       });
-      this.customText = '';
     },
     handleDeleteCustomText(text){
       let index = this.customTexts.findIndex(item=>item===text)
@@ -105,6 +110,30 @@ var vm = new Vue({
     },
     handleClearAnimation(){
       this.isInputShake = false;
+    },
+    // 模拟长按事件
+    handleEmojiMousedown(e){
+      this.longpressTimer = setTimeout(() => {
+        let box = e.target.getBoundingClientRect();
+        let top = box.top + window.pageYOffset;
+        let left = box.left + window.pageXOffset + box.width / 2;
+        let text = e.target.innerText;
+        this.flotages.push({
+          left,
+          top,
+          text
+        });
+        this.addCustomText(text)
+        this.longpressTimer = null;
+      }, 1000);;
+    },
+    handleEmojiMouseup(){
+      if (this.longpressTimer) {
+        clearTimeout(this.longpressTimer);
+      }
+    },
+    handleFlotagesAnimationend(index){
+      this.flotages.splice(index,1);
     },
   }
 })
