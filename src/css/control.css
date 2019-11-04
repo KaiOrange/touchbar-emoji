@@ -162,13 +162,16 @@ html, body {
   position: absolute;
   background: rgba(0,0,0,0.88);
   color: #fff;
-  padding: 6px 10px 1px;
+  padding: 0px 10px;
+  height: 32px;
+  line-height: 30px;
   border-radius: 999px;
   font-size: .8rem;
   transform: translateX(-50%);
-  animation: float-up 1s ease forwards;
+  animation: float-up 2.2s ease forwards;
   word-break: keep-all;
-}
+  white-space: nowrap;
+} 
 
 @keyframes shake {
   from,
@@ -197,14 +200,14 @@ html, body {
 
 @keyframes float-up {
   0% {
-    transform: translateX(-50%) scale(.8); 
+    transform: translateX(-50%) scale(.6); 
   }
-  40%,85%  {
-    transform: translateX(-50%) scale(1.2) translateY(-60px); 
-    opacity: 0.8;
+  15%, 75%  {
+    transform: translateX(-50%) scale(1) translateY(-40px); 
+    opacity: 0.88;
   }
   100%  {
-    transform: translateX(-50%) translateY(-60px) scale(0.1) ; 
+    transform: translateX(-50%) translateY(-40px) scale(0.1) ; 
     opacity: 0.0;
   }
 }

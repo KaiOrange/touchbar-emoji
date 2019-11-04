@@ -116,8 +116,13 @@ var vm = new Vue({
       this.longpressTimer = setTimeout(() => {
         let box = e.target.getBoundingClientRect();
         let top = box.top + window.pageYOffset;
-        let left = box.left + window.pageXOffset + box.width / 2;
+        let left = box.left + window.pageXOffset + box.width / 2 - 2;
         let text = e.target.innerText;
+        if (left < 54) {
+            left = 54;
+        } else if (left > 326) {
+            left = 326;
+        }
         this.flotages.push({
           left,
           top,
@@ -125,7 +130,7 @@ var vm = new Vue({
         });
         this.addCustomText(text)
         this.longpressTimer = null;
-      }, 1000);;
+      }, 800);;
     },
     handleEmojiMouseup(){
       if (this.longpressTimer) {
