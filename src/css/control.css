@@ -173,6 +173,10 @@ html, body {
   white-space: nowrap;
 } 
 
+.isDarwin .flotage {
+  line-height: 36px;
+}
+
 @keyframes shake {
   from,
   to {
@@ -202,7 +206,7 @@ html, body {
   0% {
     transform: translateX(-50%) scale(.6); 
   }
-  15%, 75%  {
+  15%, 75% {
     transform: translateX(-50%) scale(1) translateY(-40px); 
     opacity: 0.88;
   }
