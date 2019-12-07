@@ -12,8 +12,9 @@ cd touchbar-emoji
 ELECTRON_MIRROR=http://npm.taobao.org/mirrors/electron/ npm install
 
 # WindowsOS
-set "ELECTRON_MIRROR=http://npm.taobao.org/mirrors/electron" npm install
-set "PYTHON_MIRROR=http://npm.taobao.org/mirrors/python" && npm install --global --production windows-build-tools
+npm install -g cross-env
+cross-env ELECTRON_MIRROR=http://npm.taobao.org/mirrors/electron npm install
+cross-env PYTHON_MIRROR=http://npm.taobao.org/mirrors/python npm install --global --production windows-build-tools
 
 npm start
 ```
